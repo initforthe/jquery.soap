@@ -400,14 +400,16 @@ https://github.com/doedje/jquery.soap/blob/1.3.1/README.md
 				soapObject = new SOAPObject(prefix+name);
 				soapObject.attr('nil', true);
 			} else if (typeof params == 'object') {
+				soapObject = new SOAPObject(prefix+name);
 				// added by DT - check if object is in fact an Array and treat accordingly
 				if(params.constructor.toString().indexOf("Array") != -1) { // type is array
 					for(var x in params) {
-						childObject = this.json2soap(name, params[x], prefix, parentNode);
-						parentNode.appendChild(childObject);
+						for(var y in params[x]) {
+							childObject = this.json2soap(y, params[x][y], prefix, soapObject);
+							soapObject.appendChild(childObject);
+						}
 					}
 				} else {
-					soapObject = new SOAPObject(prefix+name);
 					for(var y in params) {
 						childObject = this.json2soap(y, params[y], prefix, soapObject);
 						soapObject.appendChild(childObject);
